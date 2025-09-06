@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "nome": "Introdução ao React Native",
+    "materia": "Programação Mobile",
+    "professor": "Prof. João Silva",
+    "dataEntrega": "2025-09-20",
+    "status": "Em andamento",
+    "LinkTrilha": "https://reactnative.dev/"
+  },
+  {
+    "id": 2,
+    "nome": "Banco de Dados com MySQL",
+    "materia": "Banco de Dados",
+    "professor": "Profa. Maria Souza",
+    "dataEntrega": "2025-09-30",
+    "status": "Pendente",
+    "LinkTrilha": "https://dev.mysql.com/doc/"
+  },
+  {
+    "id": 3,
+    "nome": "APIs com Express",
+    "materia": "Back-End",
+    "professor": "Prof. Carlos Oliveira",
+    "dataEntrega": "2025-10-05",
+    "status": "Concluído",
+    "LinkTrilha": "https://expressjs.com/"
+  }
+]
