@@ -1,6 +1,7 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
 import {
+  Alert,
   Platform,
   StyleSheet,
   Text,
@@ -23,19 +24,43 @@ export default function Trilhas({ navigation }) {
     setDataEntrega(currentDate);
   };
 
-  const handleSalvar = () => {
+  // Função para formatar a data no formato dd/mm/yyyy
+  const formatarData = (date) => {
+    const dia = String(date.getDate()).padStart(2, "0");
+    const mes = String(date.getMonth() + 1).padStart(2, "0");
+    const ano = date.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  };
+
+  const handleSalvar = async () => {
     // chamada da api (POST /trilhas)
     const novaTrilha = {
       nome: titulo,
       materia,
       professor,
-      dataEntrega: dataEntrega.toISOString().split("T")[0], // formato yyyy-mm-dd
+      dataEntrega: formatarData(dataEntrega), // formato yyyy-mm-dd
       status: "Em andamento",
       LinkTrilha: link,
     };
-    console.log("Nova Trilha:", novaTrilha);
-    alert("Trilha salva com sucesso!");
-    navigation.goBack(); // volta para a Home
+    try {
+      const response = await fetch("http://localhost:3000/api/trilhas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(novaTrilha),
+      });
+      if (response.ok) {
+        Alert.alert("Sucesso", "Trilha salva com sucesso!");
+        navigation.goBack();
+      } else {
+        const erro = await response.text();
+        Alert.alert("Erro", `Falha ao salvar: ${erro}`);
+      }
+    } catch (err) {
+      Alert.alert("Erro", "Não foi possível conectar ao servidor.");
+      console.error(err);
+    }
   };
 
   return (

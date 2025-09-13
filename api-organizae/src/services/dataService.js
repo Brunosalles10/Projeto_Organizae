@@ -1,5 +1,9 @@
-const fs = require("fs").promises;
-const path = require("path");
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class DataServico {
   constructor() {
@@ -29,7 +33,7 @@ class DataServico {
   async addTrilha(novaTrilha) {
     const trilhas = await this.getTrilhas();
     trilhas.push(novaTrilha);
-    await this.saveTrilhas(trilhas);
+    await this.saveTrilha(trilhas);
     return novaTrilha;
   }
 
@@ -61,4 +65,4 @@ class DataServico {
   }
 }
 
-module.exports = new DataServico();
+export default new DataServico();

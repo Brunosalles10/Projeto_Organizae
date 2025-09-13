@@ -25,5 +25,13 @@
     "dataEntrega": "2025-10-05",
     "status": "Concluído",
     "LinkTrilha": "https://expressjs.com/"
+  },
+  {
+    "id": 4,
+    "nome": "teste",
+    "materia": "teste",
+    "professor": "teste",
+    "dataEntrega": "13/09/2025",
+    "status": "Em andamento"
   }
 ]

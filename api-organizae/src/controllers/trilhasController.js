@@ -1,5 +1,5 @@
-const dataService = require("../services/dataService");
-const TrilhasModel = require("../models/trilhasModel");
+import TrilhasModel from "../models/trilhasModel.js";
+import dataService from "../services/dataService.js";
 
 class TrilhasController {
   async listarTrilhas(req, res) {
@@ -139,4 +139,4 @@ class TrilhasController {
   }
 }
 
-module.exports = new TrilhasController();
+export default new TrilhasController();

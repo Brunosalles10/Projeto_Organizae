@@ -1,10 +1,13 @@
-const express = require("express");
+import cors from "cors";
+import express from "express";
+import trilhasRoutes from "./src/routes/trilhasRoutes.js";
+
 const app = express();
 const port = process.env.PORT || 3000;
-const trilhasRoutes = require("./src/routes/trilhasRoutes");
 
 // Middleware para rotas de trilhas
 app.use(express.json());
+app.use(cors({ origin: "*" }));
 
 // Rotas de trilhas
 app.use("/api", trilhasRoutes);

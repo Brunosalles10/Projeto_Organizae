@@ -21,4 +21,4 @@ class TrilhasModel {
   }
 }
 
-module.exports = TrilhasModel;
+export default TrilhasModel;
