@@ -3,12 +3,18 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Selecione uma opção</Text>
+      <Text style={styles.title}>App Organizae</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("Trilhas")}
       >
-        <Text style={styles.buttonText}>Trilhas</Text>
+        <Text style={styles.buttonText}>Adicionar Trilha</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("ListaTrilhas")}
+      >
+        <Text style={styles.buttonText}>Ver todas trilhas adicionadas</Text>
       </TouchableOpacity>
     </View>
   );

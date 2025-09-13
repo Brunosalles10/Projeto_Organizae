@@ -1,64 +1,91 @@
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
+import MaskInput, { Masks } from "react-native-mask-input";
+
 import {
-  Alert,
-  Platform,
+  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 export default function Trilhas({ navigation }) {
   const [titulo, setTitulo] = useState("");
   const [materia, setMateria] = useState("");
   const [professor, setProfessor] = useState("");
   const [link, setLink] = useState("");
-  const [dataEntrega, setDataEntrega] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || dataEntrega;
-    setShowDatePicker(Platform.OS === "ios");
-    setDataEntrega(currentDate);
-  };
-
-  // Função para formatar a data no formato dd/mm/yyyy
-  const formatarData = (date) => {
-    const dia = String(date.getDate()).padStart(2, "0");
-    const mes = String(date.getMonth() + 1).padStart(2, "0");
-    const ano = date.getFullYear();
-    return `${dia}/${mes}/${ano}`;
-  };
+  const [dataEntrega, setDataEntrega] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSalvar = async () => {
-    // chamada da api (POST /trilhas)
+    // validação simples dos campos obrigatórios
+    if (!titulo || !materia || !professor || !dataEntrega) {
+      Toast.show({
+        type: "error",
+        text1: "Campos obrigatórios",
+        text2: "Por favor, preencha todos os campos.",
+      });
+      return;
+    }
+    // validação simples da data
+    const regexData = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!regexData.test(dataEntrega)) {
+      Toast.show({
+        type: "error",
+        text1: "Data inválida",
+        text2: "Use o formato dd/mm/yyyy",
+      });
+      return;
+    }
+
+    // cria o objeto da nova trilha
     const novaTrilha = {
       nome: titulo,
       materia,
       professor,
-      dataEntrega: formatarData(dataEntrega), // formato yyyy-mm-dd
+      dataEntrega,
       status: "Em andamento",
       LinkTrilha: link,
     };
     try {
-      const response = await fetch("http://localhost:3000/api/trilhas", {
+      // chamada da api (POST /trilhas)
+      setLoading(true); // inicia o loading
+      const response = await fetch("http://10.0.0.194:3000/api/trilhas", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(novaTrilha),
       });
+
       if (response.ok) {
-        Alert.alert("Sucesso", "Trilha salva com sucesso!");
-        navigation.goBack();
+        setTimeout(() => {
+          setLoading(false);
+          Toast.show({
+            type: "success",
+            text1: "Sucesso!",
+            text2: "Sua atividade foi salva com sucesso 🚀",
+          });
+          navigation.goBack();
+        }, 5000);
       } else {
+        setLoading(false);
         const erro = await response.text();
-        Alert.alert("Erro", `Falha ao salvar: ${erro}`);
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: "Não foi possível salvar a atividade: " + erro,
+        });
       }
     } catch (err) {
-      Alert.alert("Erro", "Não foi possível conectar ao servidor.");
+      setLoading(false);
+      Toast.show({
+        type: "error",
+        text1: "Erro de conexão",
+        text2: "Não foi possível conectar ao servidor",
+      });
       console.error(err);
     }
   };
@@ -92,20 +119,15 @@ export default function Trilhas({ navigation }) {
       />
 
       <Text style={styles.label}>Data de entrega</Text>
-      <TouchableOpacity
+      <MaskInput
         style={styles.input}
-        onPress={() => setShowDatePicker(true)}
-      >
-        <Text>{dataEntrega.toLocaleDateString()}</Text>
-      </TouchableOpacity>
-      {showDatePicker && (
-        <DateTimePicker
-          value={dataEntrega}
-          mode="date"
-          display="default"
-          onChange={onChangeDate}
-        />
-      )}
+        value={dataEntrega}
+        onChangeText={(masked, unmasked) => {
+          setDataEntrega(masked); // exemplo: "12/09/2025"
+        }}
+        mask={Masks.DATE_DDMMYYYY}
+        placeholder="dd/mm/aaaa"
+      />
 
       <Text style={styles.label}>Link</Text>
       <TextInput
@@ -115,9 +137,17 @@ export default function Trilhas({ navigation }) {
         placeholder="Digite o link"
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSalvar}>
-        <Text style={styles.buttonText}>Salvar</Text>
-      </TouchableOpacity>
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color="#007bff"
+          style={{ marginTop: 20 }}
+        />
+      ) : (
+        <TouchableOpacity style={styles.button} onPress={handleSalvar}>
+          <Text style={styles.buttonText}>Salvar</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
