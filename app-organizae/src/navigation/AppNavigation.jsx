@@ -1,6 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import DetalhesTrilha from "../screens/DetalheTrilha";
 import HomeScreen from "../screens/Home";
 import ListaTrilhas from "../screens/ListaTrilhas";
 import Trilhas from "../screens/Trilhas";
@@ -24,6 +25,11 @@ export function AppNavigation() {
           name="ListaTrilhas"
           component={ListaTrilhas}
           options={{ title: "Todas as trilhas adicionadas" }}
+        />
+        <Stack.Screen
+          name="DetalhesTrilha"
+          component={DetalhesTrilha}
+          options={{ title: "Detalhes da trilha" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

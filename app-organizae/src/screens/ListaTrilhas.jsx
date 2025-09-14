@@ -7,10 +7,11 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 
-export default function ListaTrilhas() {
+export default function ListaTrilhas({ navigation }) {
   const [trilhas, setTrilhas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pesquisa, setPesquisa] = useState("");
@@ -45,24 +46,28 @@ export default function ListaTrilhas() {
   );
 
   const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <View style={styles.cardHeader}>
-        <Text style={styles.cardTitle}>{item.nome}</Text>
-        {item.status === "Pendente" && (
-          <Image
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/463/463612.png",
-            }}
-            style={styles.statusIcon}
-          />
-        )}
+    <TouchableOpacity
+      onPress={() => navigation.navigate("DetalhesTrilha", { trilha: item })}
+    >
+      <View style={styles.card}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.cardTitle}>{item.nome}</Text>
+          {item.status === "Pendente" && (
+            <Image
+              source={{
+                uri: "https://cdn-icons-png.flaticon.com/512/463/463612.png",
+              }}
+              style={styles.statusIcon}
+            />
+          )}
+        </View>
+        <Text style={styles.cardText}>📘 Matéria: {item.materia}</Text>
+        <Text style={styles.cardText}>👨‍🏫 Professor: {item.professor}</Text>
+        <Text style={styles.cardText}>📅 Entrega: {item.dataEntrega}</Text>
+        <Text style={styles.cardText}>📌 Status: {item.status}</Text>
+        <Text style={styles.cardText}>🔗 Link: {item.LinkTrilha}</Text>
       </View>
-      <Text style={styles.cardText}>📘 Matéria: {item.materia}</Text>
-      <Text style={styles.cardText}>👨‍🏫 Professor: {item.professor}</Text>
-      <Text style={styles.cardText}>📅 Entrega: {item.dataEntrega}</Text>
-      <Text style={styles.cardText}>📌 Status: {item.status}</Text>
-      <Text style={styles.cardText}>🔗 Link: {item.LinkTrilha}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   if (loading) {

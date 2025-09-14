@@ -67,27 +67,11 @@
     "status": "Em andamento"
   },
   {
-    "id": 9,
-    "nome": "teste pc",
-    "materia": "teste pc",
-    "professor": "teste pc",
-    "dataEntrega": "18/12/1992",
-    "status": "Em andamento"
-  },
-  {
     "id": 10,
     "nome": "Teste final ",
     "materia": "Pop",
     "professor": "Brs",
     "dataEntrega": "18/12/2025",
-    "status": "Em andamento"
-  },
-  {
-    "id": 11,
-    "nome": "teste pc 2",
-    "materia": "teste 26",
-    "professor": "teste 66",
-    "dataEntrega": "08/08/2025",
     "status": "Em andamento"
   },
   {
@@ -107,14 +91,6 @@
     "status": "Em andamento"
   },
   {
-    "id": 14,
-    "nome": "Teste finalista",
-    "materia": "Teste",
-    "professor": "Teste",
-    "dataEntrega": "18/09/2025",
-    "status": "Em andamento"
-  },
-  {
     "id": 15,
     "nome": "TESTE1456",
     "materia": "Programação1",
@@ -124,10 +100,10 @@
   },
   {
     "id": 16,
-    "nome": "Teste 1",
-    "materia": "Teste",
-    "professor": "Teste",
-    "dataEntrega": "15/09/2025",
+    "nome": "trilha 01",
+    "materia": "osc",
+    "professor": "bruno",
+    "dataEntrega": "18/01/2025",
     "status": "Em andamento"
   }
 ]
