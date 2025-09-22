@@ -36,14 +36,6 @@ Com ele, o aluno pode cadastrar, visualizar, pesquisar, editar e excluir trilhas
 
 ---
 
-🎨 Layout
-
-Interface simples e intuitiva.
-
-Trilhas exibidas em cards com ícones representativos para cada informação.
-
-Ícones de status visíveis no cabeçalho de cada card.
-
 ## 🎨 Layout
 
 - Interface **simples e intuitiva**
@@ -90,4 +82,4 @@ npx expo start
 
 ## 👨‍💻 Autores
 
-- Projeto desenvolvido por [Bruno],[Eloana] e [Ana] – acadêmico de Análise e Desenvolvimento de Sistemas.
+- Projeto desenvolvido por Bruno,Eloana e Ana – acadêmico de Análise e Desenvolvimento de Sistemas.
