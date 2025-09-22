@@ -1,9 +1,33 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useLayoutEffect } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function HomeScreen({ navigation }) {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => (
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image
+            source={require("../assets/logo.png")}
+            style={{ width: 32, height: 32, marginRight: 8 }}
+            resizeMode="contain"
+          />
+          <Text style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>
+            Organizae
+          </Text>
+        </View>
+      ),
+      headerTitleAlign: "center",
+      headerStyle: { backgroundColor: "#4B9CD3" },
+    });
+  }, [navigation]);
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>App Organizae</Text>
+      <Text style={styles.Titulo}>Seja bem-vindo!</Text>
+      <Text style={styles.subtitle}>
+        Organize suas trilhas de aprendizado de forma simples e prática. Comece
+        adicionando uma nova trilha ou explore as que já criou
+      </Text>
+      <Image source={require("../assets/aluno.png")} style={styles.aluno} />
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("Trilhas")}
@@ -26,20 +50,43 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
   },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
   button: {
-    backgroundColor: "#e5e5e5",
-    padding: 20,
-    borderRadius: 10,
-    marginVertical: 10,
-    width: "80%",
     alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    backgroundColor: "#007bff",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
   },
   buttonText: {
+    color: "#fff",
     fontSize: 18,
+    fontWeight: "bold",
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    marginBottom: 20,
+    alignSelf: "left",
+  },
+  aluno: {
+    width: 180,
+    height: 180,
+    marginBottom: 0,
+    alignSelf: "center",
+  },
+  Titulo: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#000000ff",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#555",
+    textAlign: "center",
+    marginBottom: 20,
+    paddingHorizontal: 20,
   },
 });

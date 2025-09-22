@@ -95,8 +95,8 @@
     "nome": "TESTE1456",
     "materia": "Programação1",
     "professor": "Prof. Silva1",
-    "dataEntrega": "2025-10-20",
-    "status": "pendente"
+    "dataEntrega": "20/10/2025",
+    "status": "Concluído"
   },
   {
     "id": 16,
@@ -105,5 +105,13 @@
     "professor": "bruno",
     "dataEntrega": "18/01/2025",
     "status": "Em andamento"
+  },
+  {
+    "id": 17,
+    "nome": "Tarefa de Engenharia de software",
+    "materia": "engenharia de software",
+    "professor": "bruno",
+    "dataEntrega": "22/10/2025",
+    "status": "Pendente"
   }
 ]

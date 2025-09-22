@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -52,15 +51,23 @@ export default function ListaTrilhas({ navigation }) {
       <View style={styles.card}>
         <View style={styles.cardHeader}>
           <Text style={styles.cardTitle}>{item.nome}</Text>
-          {item.status === "Pendente" && (
-            <Image
-              source={{
-                uri: "https://cdn-icons-png.flaticon.com/512/463/463612.png",
-              }}
-              style={styles.statusIcon}
-            />
-          )}
+          {(() => {
+            const status = item.status?.toLowerCase().trim();
+            if (status === "pendente") {
+              return <Ionicons name="close-circle" size={24} color="red" />;
+            }
+            if (status === "em andamento") {
+              return <Ionicons name="time" size={24} color="orange" />;
+            }
+            if (status === "concluído" || status === "concluido") {
+              return (
+                <Ionicons name="checkmark-circle" size={24} color="green" />
+              );
+            }
+            return null;
+          })()}
         </View>
+
         <Text style={styles.cardText}>📘 Matéria: {item.materia}</Text>
         <Text style={styles.cardText}>👨‍🏫 Professor: {item.professor}</Text>
         <Text style={styles.cardText}>📅 Entrega: {item.dataEntrega}</Text>
@@ -160,7 +167,6 @@ const styles = StyleSheet.create({
   statusIcon: {
     width: 24,
     height: 24,
-    tintColor: "red",
   },
   emptyText: {
     textAlign: "center",
