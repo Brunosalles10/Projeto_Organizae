@@ -1,10 +1,10 @@
 [
   {
     "id": 1,
-    "nome": "Introdução ao React Native",
+    "nome": "Introdução  React Native",
     "materia": "Programação Mobile",
     "professor": "Prof. João Silva",
-    "dataEntrega": "2025-09-20",
+    "dataEntrega": "25/09/2025",
     "status": "Em andamento",
     "LinkTrilha": "https://reactnative.dev/"
   },
@@ -13,7 +13,7 @@
     "nome": "Banco de Dados com MySQL",
     "materia": "Banco de Dados",
     "professor": "Profa. Maria Souza",
-    "dataEntrega": "2025-09-30",
+    "dataEntrega": "25/09/2025",
     "status": "Pendente",
     "LinkTrilha": "https://dev.mysql.com/doc/"
   },
@@ -99,19 +99,27 @@
     "status": "Concluído"
   },
   {
-    "id": 16,
-    "nome": "trilha 01",
-    "materia": "osc",
-    "professor": "bruno",
-    "dataEntrega": "18/01/2025",
-    "status": "Em andamento"
-  },
-  {
     "id": 17,
     "nome": "Tarefa de Engenharia de software",
     "materia": "engenharia de software",
-    "professor": "bruno",
+    "professor": "bruno s",
     "dataEntrega": "22/10/2025",
     "status": "Pendente"
+  },
+  {
+    "id": 18,
+    "nome": "Atividade de banco de dados",
+    "materia": "banco de dados",
+    "professor": "murilo",
+    "dataEntrega": "18/10/2025",
+    "status": "Em andamento"
+  },
+  {
+    "id": 19,
+    "nome": "Atividade de Programação básica",
+    "materia": "tecnicas de programação",
+    "professor": "joao",
+    "dataEntrega": "10/10/2025",
+    "status": "Em andamento"
   }
 ]

@@ -39,6 +39,20 @@ export default function Trilhas({ navigation }) {
       });
       return;
     }
+    // impedir datas passadas
+    const [dia, mes, ano] = dataEntrega.split("/");
+    const dataDigitada = new Date(`${ano}-${mes}-${dia}`);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0); // zera hora para comparar só a data
+
+    if (dataDigitada < hoje) {
+      Toast.show({
+        type: "error",
+        text1: "Data inválida",
+        text2: "A data não pode ser anterior ao dia de hoje",
+      });
+      return;
+    }
 
     // cria o objeto da nova trilha
     const novaTrilha = {
@@ -66,7 +80,7 @@ export default function Trilhas({ navigation }) {
           Toast.show({
             type: "success",
             text1: "Sucesso!",
-            text2: "Sua atividade foi salva com sucesso 🚀",
+            text2: "Sua atividade foi salva com sucesso",
           });
           navigation.goBack();
         }, 5000);

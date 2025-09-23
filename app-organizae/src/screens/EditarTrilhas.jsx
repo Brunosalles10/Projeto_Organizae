@@ -1,4 +1,3 @@
-// DetalheTrilha.tsx
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
@@ -12,7 +11,7 @@ import {
 import MaskInput, { Masks } from "react-native-mask-input";
 import Toast from "react-native-toast-message";
 
-export default function DetalheTrilha({ route, navigation }) {
+export default function EditarTrilhas({ route, navigation }) {
   const { trilha } = route.params;
   const [nome, setNome] = useState(trilha.nome);
   const [materia, setMateria] = useState(trilha.materia);
@@ -39,6 +38,20 @@ export default function DetalheTrilha({ route, navigation }) {
         type: "error",
         text1: "Data inválida",
         text2: "Use o formato dd/mm/yyyy",
+      });
+      return;
+    }
+    // impedir datas passadas
+    const [dia, mes, ano] = dataEntrega.split("/");
+    const dataDigitada = new Date(`${ano}-${mes}-${dia}`);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0); // zera hora para comparar só a data
+
+    if (dataDigitada < hoje) {
+      Toast.show({
+        type: "error",
+        text1: "Data inválida",
+        text2: "A data não pode ser anterior ao dia de hoje",
       });
       return;
     }
@@ -69,9 +82,9 @@ export default function DetalheTrilha({ route, navigation }) {
           Toast.show({
             type: "success",
             text1: "Atualizado",
-            text2: "Trilha salva com sucesso ✅",
+            text2: "Trilha salva com sucesso",
           });
-          navigation.goBack();
+          navigation.navigate("Home");
         }, 3000);
       } else {
         setLoading(false);
@@ -107,9 +120,9 @@ export default function DetalheTrilha({ route, navigation }) {
         Toast.show({
           type: "success",
           text1: "Deletado",
-          text2: "Trilha removida ❌",
+          text2: "Trilha removida ",
         });
-        navigation.goBack();
+        navigation.navigate("Home");
       } else {
         Toast.show({
           type: "error",

@@ -46,7 +46,7 @@ export default function ListaTrilhas({ navigation }) {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate("DetalhesTrilha", { trilha: item })}
+      onPress={() => navigation.navigate("TrilhasDetalhes", { trilha: item })}
     >
       <View style={styles.card}>
         <View style={styles.cardHeader}>
@@ -107,7 +107,7 @@ export default function ListaTrilhas({ navigation }) {
       {trilhasFiltradas.length > 0 ? (
         <FlatList
           data={trilhasFiltradas}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
         />
       ) : (
