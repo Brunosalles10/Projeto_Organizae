@@ -121,5 +121,13 @@
     "professor": "joao",
     "dataEntrega": "10/10/2025",
     "status": "Em andamento"
+  },
+  {
+    "id": 20,
+    "nome": "Atividade de Banco de dados MySql",
+    "materia": "Banco de dados",
+    "professor": "Murilo",
+    "dataEntrega": "25/10/2025",
+    "status": "Em andamento"
   }
 ]
