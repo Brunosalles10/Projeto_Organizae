@@ -1,15 +1,11 @@
 services:
   service-users:
-    build: ./users
+    build: ./backend/users
+    env_file:
+      - ./backend/users/.env
     ports:
       - "3001:3000"
     restart: always
-    environment:
-      DB_HOST: users-db
-      DB_USER: postgres
-      DB_PASS: postgres
-      DB_NAME: usersdb
-      DB_PORT: 5432
     depends_on:
       - users-db
     networks: [backend]
@@ -29,19 +25,17 @@ services:
       - backend
 
   service-activity:
-    build: ./activity
+    build: ./backend/activity
+    env_file:
+      - ./backend/activity/.env
     restart: always
     environment:
-      DB_HOST: activity-db
-      DB_USER: postgres
-      DB_PASS: postgres
-      DB_NAME: activitydb
-      DB_PORT: 5432
       USERS_API: http://service-users:3000
       REDIS_HOST: redis
       REDIS_PORT: 6379
     depends_on:
       - activity-db
+      - redis
     networks: [backend]
 
   activity-db:
@@ -74,6 +68,7 @@ services:
       - "8080:8080"
     depends_on:
       - service-users
+      - service-activity
     networks: [backend]
 
 volumes:
