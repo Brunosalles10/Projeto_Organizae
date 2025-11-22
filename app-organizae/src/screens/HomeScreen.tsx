@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator, Button, Text } from "react-native-paper";
 import { useAuth } from "../contexts/AuthContext";
@@ -7,11 +8,6 @@ export const HomeScreen = ({ navigation }: any) => {
   const { fetchActivities, deleteActivity, user } = useAuth();
   const [activities, setActivities] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // Carrega as atividades ao montar o componente
-  useEffect(() => {
-    loadActivities();
-  }, []);
 
   const loadActivities = async () => {
     try {
@@ -24,6 +20,12 @@ export const HomeScreen = ({ navigation }: any) => {
       setLoading(false);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      loadActivities();
+    }, [])
+  );
 
   const handleDelete = async (id: number) => {
     try {

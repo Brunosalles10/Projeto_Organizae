@@ -1,22 +1,31 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { ActivityIndicator, View } from "react-native";
-import { useAuth } from "../contexts/AuthContext";
+import React from "react";
 import ActivityDetailsScreen from "../screens/ActivityDetails";
-import { LoginScreen } from "../screens/Auth/LoginScrenn";
-import { RegisterScreen } from "../screens/Auth/RegisterScreen";
 import CreateActivityScreen from "../screens/CreateActivity";
 import EditActivityScreen from "../screens/EditActivity";
 import { HomeScreen } from "../screens/HomeScreen";
 import { ProfileScreen } from "../screens/ProfileScreen";
 
-const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator();
 
-// rotas privadas usuario logado
-function MainTabs() {
+// função que encapsula as telas da stack do Home
+function HomeStackNavigator() {
+  return (
+    <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+      <HomeStack.Screen name="HomeScreen" component={HomeScreen} />
+      <HomeStack.Screen
+        name="ActivityDetails"
+        component={ActivityDetailsScreen}
+      />
+    </HomeStack.Navigator>
+  );
+}
+
+// função que define as tabs principais do app
+export default function MainTabs() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -27,7 +36,7 @@ function MainTabs() {
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeStackNavigator}
         options={{
           tabBarLabel: "Início",
           tabBarIcon: ({ color, size }) => (
@@ -73,46 +82,5 @@ function MainTabs() {
         }}
       />
     </Tab.Navigator>
-  );
-}
-
-// rotas públicas usuario não logado
-function AuthStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
-    </Stack.Navigator>
-  );
-}
-
-// navegação principal
-export default function AppNavigator() {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#4F46E5" />
-      </View>
-    );
-  }
-
-  return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {user ? (
-          <>
-            <Stack.Screen name="MainTabs" component={MainTabs} />
-            <Stack.Screen
-              name="ActivityDetails"
-              component={ActivityDetailsScreen}
-            />
-          </>
-        ) : (
-          <Stack.Screen name="AuthStack" component={AuthStack} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
   );
 }
