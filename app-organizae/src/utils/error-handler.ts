@@ -1,4 +1,3 @@
-// src/utils/error-handler.ts
 import { AxiosError } from "axios";
 import { Alert } from "react-native";
 
