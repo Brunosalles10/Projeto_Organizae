@@ -40,7 +40,7 @@ export const RegisterScreen = ({ navigation }: any) => {
         password: validatedData.password,
       });
 
-      showSuccessAlert(SuccessMessages.auth.register);
+      setTimeout(() => showSuccessAlert(SuccessMessages.auth.register), 5000);
       navigation.replace("Login");
     } catch (err) {
       if (err instanceof z.ZodError) {

@@ -1,6 +1,9 @@
 import { LoginFormData, loginSchema } from "@/src/schemas/login.schema";
+import { showSuccessAlert } from "@/src/utils/error-handler";
+import { SuccessMessages } from "@/src/utils/success-messages";
 import React, { useState } from "react";
 import {
+  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -33,6 +36,7 @@ export const LoginScreen = ({ navigation }: any) => {
       const validatedData = loginSchema.parse(form);
 
       await signIn(validatedData.email, validatedData.password);
+      setTimeout(() => showSuccessAlert(SuccessMessages.auth.login), 5000);
     } catch (err) {
       if (err instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};
@@ -63,8 +67,20 @@ export const LoginScreen = ({ navigation }: any) => {
         <View className="flex-1 justify-center">
           <View className="mb-10">
             <View className="items-center mb-8">
-              <View className="bg-primary rounded-full p-4 mb-4" />
-              <Text className="text-white text-2xl font-bold">Bem-vindo</Text>
+              {/* Imagem logo*/}
+              <Image
+                source={require("../../assets/logo.png")}
+                style={{
+                  width: 150,
+                  height: 100,
+                  borderRadius: 44,
+                  marginBottom: 12,
+                }}
+              />
+
+              <Text className="text-white text-2xl font-bold text-center">
+                Seja bem-vindo ao seu Organizador de Estudos
+              </Text>
             </View>
 
             {/* Mensagem de erro geral */}
