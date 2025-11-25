@@ -6,15 +6,19 @@ const API_BASE_URL = "http://10.0.0.194:8080";
 const activityApi = axios.create({
   baseURL: `${API_BASE_URL}/activity`,
   timeout: 30000,
-  headers: { "Content-Type": "application/json" },
 });
 
 //  adiciona o token JWT
-activityApi.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+activityApi.interceptors.request.use(
+  async (config) => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 // Buscar todas as atividades do usuário logado
 export const getUserActivities = async () => {
@@ -29,14 +33,15 @@ export const getActivityById = async (id: number) => {
 };
 
 // Criar nova atividade
-export const createActivity = async (activityData: any) => {
-  const response = await activityApi.post("/", activityData);
+export const createActivity = async (activityData: FormData) => {
+  const response = await activityApi.post("", activityData, {});
   return response.data;
 };
 
 // Atualizar uma atividade
-export const updateActivity = async (id: number, updates: any) => {
-  const response = await activityApi.patch(`/${id}`, updates);
+export const updateActivity = async (id: number, updates: FormData) => {
+  const response = await activityApi.patch(`/${id}`, updates, {});
+
   return response.data;
 };
 

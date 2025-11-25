@@ -6,9 +6,6 @@ const API_BASE_URL = "http://10.0.0.194:8080";
 const usersApi = axios.create({
   baseURL: `${API_BASE_URL}`,
   timeout: 30000,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 // Adiciona o token JWT
@@ -21,6 +18,7 @@ usersApi.interceptors.request.use(async (config) => {
 // Função para login
 export const signInApi = async (email: string, password: string) => {
   const response = await usersApi.post("/auth/login", { email, password });
+  console.log("Login response:", response);
   return response.data;
 };
 
@@ -50,14 +48,14 @@ export const signOutApi = async () => {
 };
 
 //Função para atualizar o perfil do usuário
-export const updateUserApi = async (data: any) => {
-  const response = await usersApi.put("/users", data);
+export const updateUserApi = async (id: string | number, data: any) => {
+  const response = await usersApi.patch(`/users/${id}`, data);
   return response.data;
 };
 
 //Função para deletar o usuário
-export const deleteUserApi = async () => {
-  const response = await usersApi.delete("/users");
+export const deleteUserApi = async (id: string | number) => {
+  const response = await usersApi.delete(`/users/${id}`);
   return response.data;
 };
 
