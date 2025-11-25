@@ -23,8 +23,8 @@ interface AuthContextProps {
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   signUp: (data: any) => Promise<void>;
-  updateUserProfile: (data: any) => Promise<void>;
-  deleteUserProfile: () => Promise<void>;
+  updateUserProfile: (id: string | number, data: any) => Promise<void>;
+  deleteUserProfile: (id: string | number) => Promise<void>;
   getUserProfile: () => Promise<void>;
   fetchActivities: () => Promise<any[]>;
   getActivityById: (id: number) => Promise<any>;
@@ -35,7 +35,6 @@ interface AuthContextProps {
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
-// Provedor do contexto de autenticação
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -57,11 +56,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Função de login
   const signIn = async (email: string, password: string) => {
     const response = await usersApi.signInApi(email, password);
-    const { token, user } = response;
-    await saveToken(token);
+    const { access_token, user } = response;
+    await saveToken(access_token);
     await saveUser(user);
-
-    setToken(token);
+    setToken(access_token);
     setUser(user);
   };
 
@@ -72,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   //Função para profile
   const getUserProfile = async () => {
-    const profile = usersApi.getUserProfileApi();
+    const profile = await usersApi.getUserProfileApi();
     setUser(profile);
     await saveUser(profile);
   };
@@ -85,16 +83,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   //Função para atualizar o perfil do usuário
-  const updateUserProfile = async (data: any) => {
-    await usersApi.updateUserApi(data);
-    const updatedUser = await usersApi.getUserProfileApi();
-    setUser(updatedUser);
-    await saveUser(updatedUser);
+  const updateUserProfile = async (id: string | number, data: any) => {
+    await usersApi.updateUserApi(id, data);
+
+    if (!data.currentPassword && !data.newPassword) {
+      const updatedUser = await usersApi.getUserProfileApi();
+      setUser(updatedUser);
+      await saveUser(updatedUser);
+    }
   };
 
   //Função para deletar o perfil do usuário
-  const deleteUserProfile = async () => {
-    await usersApi.deleteUserApi();
+  const deleteUserProfile = async (id: string | number) => {
+    await usersApi.deleteUserApi(id);
     await clearStorage();
     setToken(null);
     setUser(null);
@@ -113,15 +114,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   //Função para criar atividades do usuário
-  const createActivity = (data: any) => {
-    const activity = activityApi.createActivity(data);
-    return activity;
+  const createActivity = async (data: FormData) => {
+    return await activityApi.createActivity(data);
   };
 
   // Função para atualizar atividades do usuário
-  const updateActivity = (id: number, data: any) => {
-    const activity = activityApi.updateActivity(id, data);
-    return activity;
+  const updateActivity = async (id: number, data: FormData) => {
+    return await activityApi.updateActivity(id, data);
   };
 
   // Função para deletar atividades do usuário
