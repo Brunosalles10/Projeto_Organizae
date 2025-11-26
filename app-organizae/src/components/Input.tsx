@@ -27,7 +27,6 @@ export const Input: React.FC<InputProps> = ({
   error,
   ...props
 }) => {
-  // Se tem control, usa Controller (React Hook Form)
   if (control && name) {
     return (
       <Controller

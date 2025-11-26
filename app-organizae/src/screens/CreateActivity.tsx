@@ -1,167 +1,102 @@
 import { useNavigation } from "@react-navigation/native";
-import * as ImagePicker from "expo-image-picker";
-import React, { useState } from "react";
-import {
-  Alert,
-  Image,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import React from "react";
+import { ScrollView, Text, View } from "react-native";
+
 import { createActivity } from "../api/activity.api";
-import { useAuth } from "../contexts/AuthContext";
+import { Button } from "../components/Button";
+import { DatePickerField } from "../components/DatePickerField";
+import { ImagePickerField } from "../components/ImagePickerField";
+import { Input } from "../components/Input";
+import { Loading } from "../components/Loading";
+import { useActivityForm } from "../hooks/useActivityForm";
+import { showSuccessAlert } from "../utils/error-handler";
+import { SuccessMessages } from "../utils/success-messages";
 
 export default function CreateActivityScreen() {
   const navigation = useNavigation();
-  const { user } = useAuth();
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [professor, setProfessor] = useState("");
-  const [date, setDate] = useState("");
-  const [status, setStatus] = useState<
-    "concluído" | "em andamento" | "cancelado"
-  >("em andamento");
-  const [link, setLink] = useState("");
-  const [image, setImage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const {
+    control,
+    errors,
+    image,
+    setImage,
+    handleSubmit,
+    reset,
+    isSubmitting,
+    loading,
+    onSubmitWrapper,
+  } = useActivityForm(async (formData: FormData) => {
+    await createActivity(formData);
+    showSuccessAlert(SuccessMessages.activity.created);
+    reset();
+    setImage(null);
+    navigation.goBack();
+  });
 
-  const pickImage = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
-      Alert.alert("Permissão negada", "Precisamos de acesso à sua galeria.");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.8,
-    });
-
-    if (!result.canceled && result.assets.length > 0) {
-      setImage(result.assets[0].uri);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (
-      !title.trim() ||
-      !description.trim() ||
-      !professor.trim() ||
-      !date.trim() ||
-      !link.trim()
-    ) {
-      Alert.alert("Erro", "Preencha todos os campos obrigatórios.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("professor", professor);
-    formData.append("date", date);
-    formData.append("status", status);
-    formData.append("link", link);
-    formData.append("userId", String(user?.id));
-
-    if (image) {
-      const filename = image.split("/").pop() || "foto.jpg";
-      const match = /\.([a-zA-Z0-9]+)$/.exec(filename);
-      const type = match ? `image/${match[1]}` : "image";
-
-      formData.append("image", {
-        uri: image,
-        name: filename,
-        type,
-      } as any);
-    }
-
-    try {
-      setLoading(true);
-      await createActivity(formData);
-      Alert.alert("Sucesso", "Atividade criada com sucesso!");
-      navigation.goBack();
-    } catch (error) {
-      console.error("Erro ao criar atividade:", error);
-      Alert.alert("Erro", "Não foi possível criar a atividade.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (loading) return <Loading message="Preparando formulário..." />;
 
   return (
-    <ScrollView className="flex-1 bg-white p-6">
-      <Text className="text-2xl font-bold mb-4 text-gray-800">
+    <ScrollView className="flex-1 bg-secondary-dark p-6">
+      <Text className="text-3xl font-bold text-white mb-6 text-center">
         Nova Atividade
       </Text>
 
-      <TextInput
-        className="border border-gray-300 rounded-xl p-3 mb-4 text-base"
-        placeholder="Título"
-        value={title}
-        onChangeText={setTitle}
+      <Input
+        control={control}
+        name="title"
+        label="Título"
+        error={errors.title?.message}
       />
-
-      <TextInput
-        className="border border-gray-300 rounded-xl p-3 mb-4 text-base"
-        placeholder="Descrição"
-        value={description}
-        onChangeText={setDescription}
+      <Input
+        control={control}
+        name="description"
+        label="Descrição"
+        error={errors.description?.message}
         multiline
       />
-
-      <TextInput
-        className="border border-gray-300 rounded-xl p-3 mb-4 text-base"
-        placeholder="Professor"
-        value={professor}
-        onChangeText={setProfessor}
+      <Input
+        control={control}
+        name="professor"
+        label="Professor"
+        error={errors.professor?.message}
       />
-
-      <TextInput
-        className="border border-gray-300 rounded-xl p-3 mb-4 text-base"
-        placeholder="Data (AAAA-MM-DD)"
-        value={date}
-        onChangeText={setDate}
+      <DatePickerField
+        control={control}
+        name="date"
+        label="Data de Entrega"
+        error={errors.date?.message}
       />
-
-      <TextInput
-        className="border border-gray-300 rounded-xl p-3 mb-4 text-base"
-        placeholder="Link"
-        value={link}
-        onChangeText={setLink}
+      <Input
+        control={control}
+        name="link"
+        label="Link"
+        error={errors.link?.message}
       />
-
-      <TouchableOpacity
-        className="rounded-xl bg-indigo-600 py-3 mb-4"
-        onPress={pickImage}
-      >
-        <Text className="text-center text-white font-semibold">
-          {image ? "Alterar Imagem" : "Selecionar Imagem"}
+      <View className="bg-primary/10 border border-primary/30 rounded-xl p-4 mb-4">
+        <Text className="text-primary text-sm font-semibold">
+          ℹ️ Status Inicial
         </Text>
-      </TouchableOpacity>
-
-      {image && (
-        <Image
-          source={{ uri: image }}
-          className="w-full h-48 rounded-xl mb-4"
-          resizeMode="cover"
-        />
-      )}
-
-      <TouchableOpacity
-        disabled={loading}
-        onPress={handleSubmit}
-        className={`rounded-2xl py-3 ${
-          loading ? "bg-gray-400" : "bg-green-600"
-        }`}
-      >
-        <Text className="text-center text-white text-lg font-semibold">
-          {loading ? "Enviando..." : "Criar Atividade"}
+        <Text className="text-white/70 text-sm mt-1">
+          Esta atividade será criada com status em andamento automaticamente.
         </Text>
-      </TouchableOpacity>
+      </View>
+
+      <ImagePickerField onImageSelected={setImage} initialImage={image} />
+
+      <Button
+        title="Salvar Atividade"
+        icon="check-circle"
+        onPress={handleSubmit(onSubmitWrapper)}
+        loading={isSubmitting}
+        variant="primary"
+      />
+      <View className="h-3" />
+      <Button
+        title="Cancelar"
+        icon="close"
+        onPress={() => navigation.goBack()}
+        variant="secondary"
+      />
     </ScrollView>
   );
 }

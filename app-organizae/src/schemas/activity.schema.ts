@@ -18,14 +18,30 @@ export const activitySchema = z.object({
     .string({ message: "Data é obrigatória" })
     .regex(/^\d{4}-\d{2}-\d{2}$/, {
       message: "Data deve estar no formato AAAA-MM-DD",
-    }),
+    })
+    .refine(
+      (dateString) => {
+        const selectedDate = new Date(dateString + "T00:00:00");
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return selectedDate >= today;
+      },
+      {
+        message: "A data não pode ser anterior ao dia de hoje",
+      }
+    ),
 
   link: z
     .string()
-    .optional()
-    .refine((v) => !v || /^https?:\/\/.+\..+/i.test(v), {
-      message: "Link inválido",
-    })
+    .nonempty({ message: "Link é obrigatório" })
+    .refine(
+      (v) => {
+        if (!v) return true;
+
+        return /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/.*)?$/i.test(v);
+      },
+      { message: "Link inválido" }
+    )
     .or(z.literal("")),
 
   status: z.enum(["concluído", "em andamento", "cancelado"]).optional(),
