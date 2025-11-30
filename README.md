@@ -1,4 +1,4 @@
-# 📚 Projeto Acadêmico Para simular um Microsserivço – Gerenciador de Trilhas de Aprendizado - OrganizaE 
+# 📚 Projeto Acadêmico Para simular um Microsserivço – Gerenciador de Atividades Acadêmicas.
 
 ---
 
