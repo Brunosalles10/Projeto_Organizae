@@ -1,4 +1,4 @@
-# 📚 Projeto Acadêmico Para simular um Microsserivço – Gerenciador de Atividades Acadêmicas.
+# 📚 Projeto Para simular um Microsserivço – Gerenciador de Atividades Acadêmicas.
 
 ---
 
